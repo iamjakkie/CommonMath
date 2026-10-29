@@ -1,0 +1,43 @@
+{
+  "name": "common-math",
+  "version": "0.1.0",
+  "description": "Embeddable, keyboard-first mathematics editor with browser-side evaluation.",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/common-math.js",
+  "module": "./dist/common-math.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/common-math.js"
+    }
+  },
+  "files": [
+    "dist",
+    "docs",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --config vite.lib.config.ts && node scripts/finish-lib.mjs",
+    "build:demo": "vite build",
+    "test": "vitest run",
+    "test:browser": "npm run build && playwright test",
+    "preview": "vite preview --host 127.0.0.1 --port 4173"
+  },
+  "dependencies": {
+    "@cortex-js/compute-engine": "0.173.0",
+    "mathlive": "0.111.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "playwright": "^1.60.0",
+    "typescript": "^6.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^4.1.10"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

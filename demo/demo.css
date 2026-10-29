@@ -1,0 +1,57 @@
+/* Hostile host styles. They must not restyle the component's shadow tree. */
+* {
+  color: #ff00aa !important;
+  font-family: "Comic Sans MS", "Comic Sans", cursive !important;
+}
+input,
+button,
+textarea {
+  background: red !important;
+  border: 4px solid lime !important;
+}
+math-field {
+  background: yellow !important;
+  color: blue !important;
+  font-size: 8px !important;
+}
+
+body {
+  margin: 0;
+  background: #fff4fb;
+}
+.page-head,
+main {
+  width: min(880px, calc(100% - 32px));
+  margin: 0 auto;
+}
+.page-head {
+  padding: 28px 0 8px;
+}
+h1,
+h2 {
+  font-weight: 500;
+}
+.article {
+  max-width: 640px;
+}
+.card {
+  box-sizing: border-box;
+  width: 320px;
+  max-width: 100%;
+  border: 1px solid #222;
+  padding: 12px;
+  margin: 24px 0;
+}
+.docs,
+.log {
+  margin: 28px 0 48px;
+}
+#events {
+  min-height: 2em;
+  padding-left: 1.2em;
+}
+#outside {
+  display: block;
+  margin: 8px 0 12px;
+  width: min(320px, 100%);
+}
