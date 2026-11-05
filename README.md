@@ -38,7 +38,7 @@ npm run test:browser
 
 A check page is generated at `dist/nested/index.html`. It links `../common-math.css` and `../common-math.js`, so the same files work one directory down.
 
-From TypeScript, `import "common-math"` also registers the element and exports `defineCommonMath`, `CommonMathElement`, and the outcome types.
+From TypeScript, `import "common-math"` also registers the element and exports `defineCommonMath`, `CommonMathElement`, and the outcome types. `import { parseAction, runOperation } from "common-math/engine"` is the same evaluation path without the editor, for a host that checks an answer on the server. `import "common-math/source"` is the TypeScript entry a bundler can compile, including the worker.
 
 ## Element API
 
