@@ -395,6 +395,12 @@ export class CommonMathElement extends HTMLElement {
       if (!this.answerOnly()) void this.execute();
       return;
     }
+    if (this.answerOnly() && key === "Enter" && !mod && !event.altKey && this.paletteEl?.hidden !== false) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.field?.executeCommand("addRowAfter");
+      return;
+    }
     if (mod && key.toLowerCase() === "k" && !event.altKey) {
       event.preventDefault();
       event.stopPropagation();
@@ -605,8 +611,8 @@ export class CommonMathElement extends HTMLElement {
     this.runButton.textContent = state === "running" ? "Cancel" : "Run";
     this.hintEl.textContent = answering
       ? this.latex.trim()
-        ? "Check compares this answer."
-        : "Type the answer. / makes a fraction."
+        ? "Enter starts another line. Check compares this answer."
+        : "Type the answer. Enter starts another line. / makes a fraction."
       : this.transient || hintFor(state, this.latex);
     if (answering) {
       this.resultEl.hidden = true;

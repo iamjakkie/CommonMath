@@ -92,6 +92,10 @@ math-field {
 }
 math-field::part(virtual-keyboard-toggle) { display: none; }
 math-field:focus { outline: none; }
+:host([mode="answer"]) math-field {
+  min-height: 6.2em;
+  overflow: visible;
+}
 .action-row {
   display: flex;
   flex-wrap: wrap;
