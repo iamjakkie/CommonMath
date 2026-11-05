@@ -38,11 +38,11 @@ npm run test:browser
 
 A check page is generated at `dist/nested/index.html`. It links `../common-math.css` and `../common-math.js`, so the same files work one directory down.
 
-From TypeScript, `import "common-math"` also registers the element and exports `defineCommonMath`, `CommonMathElement`, and the outcome types.
+From TypeScript, `import "common-math"` also registers the element and exports `defineCommonMath`, `CommonMathElement`, and the outcome types. `import { parseAction, runOperation } from "common-math/engine"` is the same evaluation path without the editor, for a host that checks an answer on the server. `import "common-math/source"` is the TypeScript entry a bundler can compile, including the worker.
 
 ## Element API
 
-Attributes and properties: `value` (LaTeX), `action`, `theme` (`light`, `dark`, or `system`). Setting them does not run a calculation. `aria-label` on the host is copied to the math field. The element does not autofocus.
+Attributes and properties: `value` (LaTeX), `action`, `theme` (`light`, `dark`, or `system`), and `mode`. Setting them does not run a calculation. `mode="answer"` hides the action line and Run, `execute()` does not apply an action, and Enter starts another line. `aria-label` on the host is copied to the math field. The element does not autofocus.
 
 Methods: `focus()`, `execute(): Promise<CalculationOutcome>`, `clear()`.
 
