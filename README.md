@@ -42,7 +42,7 @@ From TypeScript, `import "common-math"` also registers the element and exports `
 
 ## Element API
 
-Attributes and properties: `value` (LaTeX), `action`, `theme` (`light`, `dark`, or `system`). Setting them does not run a calculation. `aria-label` on the host is copied to the math field. The element does not autofocus.
+Attributes and properties: `value` (LaTeX), `action`, `theme` (`light`, `dark`, or `system`), and `mode`. Setting them does not run a calculation. `mode="answer"` hides the action line and Run, and `execute()` does not apply an action. `aria-label` on the host is copied to the math field. The element does not autofocus.
 
 Methods: `focus()`, `execute(): Promise<CalculationOutcome>`, `clear()`.
 

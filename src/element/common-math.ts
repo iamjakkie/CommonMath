@@ -97,7 +97,7 @@ export class CommonMathElement extends HTMLElement {
   private colsInput!: HTMLInputElement;
 
   static get observedAttributes(): string[] {
-    return ["value", "action", "theme", "aria-label"];
+    return ["value", "action", "theme", "aria-label", "mode"];
   }
 
   get value(): string {
@@ -163,6 +163,10 @@ export class CommonMathElement extends HTMLElement {
 
   attributeChangedCallback(name: string, _old: string | null, value: string | null): void {
     if (!this.shadowRoot || this.reflecting || !this.booted) return;
+    if (name === "mode") {
+      this.renderChrome();
+      return;
+    }
     this.applyAttribute(name, value, true);
   }
 
@@ -180,6 +184,14 @@ export class CommonMathElement extends HTMLElement {
   }
 
   async execute(): Promise<CalculationOutcome> {
+    if (this.answerOnly()) {
+      return {
+        status: "cancelled",
+        sourceLatex: this.latex,
+        action: "",
+        revision: this.revision,
+      };
+    }
     const revision = this.revision;
     const id = String(++this.requestSeq);
     this.acceptedRequestId = id;
@@ -342,6 +354,7 @@ export class CommonMathElement extends HTMLElement {
   };
 
   private onRunClick = (): void => {
+    if (this.answerOnly()) return;
     if (this.runningId) {
       this.client.abort(this.runningId);
       return;
@@ -379,7 +392,7 @@ export class CommonMathElement extends HTMLElement {
     if (mod && key === "Enter") {
       event.preventDefault();
       event.stopPropagation();
-      void this.execute();
+      if (!this.answerOnly()) void this.execute();
       return;
     }
     if (mod && key.toLowerCase() === "k" && !event.altKey) {
@@ -547,6 +560,11 @@ export class CommonMathElement extends HTMLElement {
     this.closePalette();
   }
 
+  /** An exam answer is typed here. The action is not applied to it. */
+  private answerOnly(): boolean {
+    return this.getAttribute("mode") === "answer";
+  }
+
   private viewState(): ViewState {
     if (this.runningId) return "running";
     const latex = this.latex.trim();
@@ -581,8 +599,22 @@ export class CommonMathElement extends HTMLElement {
     if (this.displayed) this.dataset.status = this.displayed.status;
     else delete this.dataset.status;
     this.setAttribute("aria-busy", state === "running" ? "true" : "false");
+    const answering = this.answerOnly();
+    this.actionInput.closest(".action-label")?.toggleAttribute("hidden", answering);
+    this.runButton.hidden = answering;
     this.runButton.textContent = state === "running" ? "Cancel" : "Run";
-    this.hintEl.textContent = this.transient || hintFor(state, this.latex);
+    this.hintEl.textContent = answering
+      ? this.latex.trim()
+        ? "Check compares this answer."
+        : "Type the answer. / makes a fraction."
+      : this.transient || hintFor(state, this.latex);
+    if (answering) {
+      this.resultEl.hidden = true;
+      this.renderSuggestions();
+      this.renderPalette();
+      this.renderMenu();
+      return;
+    }
     this.renderResult(state);
     this.renderSuggestions();
     this.renderPalette();
