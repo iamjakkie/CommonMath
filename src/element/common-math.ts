@@ -130,7 +130,11 @@ export class CommonMathElement extends HTMLElement {
       const shadow = this.attachShadow({ mode: "open" });
       sheets ??= sharedSheets();
       shadow.adoptedStyleSheets = sheets;
-      shadow.innerHTML = TEMPLATE;
+      // Parse in a template. Shadow innerHTML uses the host as context, so a
+      // host inside a form would drop this component's own form.
+      const holder = document.createElement("template");
+      holder.innerHTML = TEMPLATE;
+      shadow.append(holder.content.cloneNode(true));
       this.cache(shadow);
       configureMathfield(this.field);
       shadow.addEventListener("keydown", this.onKeyDown, true);
